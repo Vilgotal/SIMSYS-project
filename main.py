@@ -15,4 +15,6 @@ print(test1.position)
 
 print(test2.aisle_indices)
 
-# Main loop
+# Main loopasdfasdfa
+sortedasdf
+asdf
