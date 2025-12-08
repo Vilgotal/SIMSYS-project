@@ -75,8 +75,8 @@ class Agent:
         return col_map, aisle_indices
 
     def _next_position(self, direction):
-        if direction == "u": return self.x, self.y - 1
-        if direction == "d": return self.x, self.y + 1
+        if direction == "d": return self.x, self.y - 1
+        if direction == "u": return self.x, self.y + 1
         if direction == "l": return self.x - 1, self.y
         if direction == "r": return self.x + 1, self.y
         raise ValueError("Invalid direction")
@@ -117,10 +117,10 @@ class Agent:
                         return
                     else:
                         if self.y < self.column_index:
-                            nx, ny = self._next_position("d")
-
-                        elif self.y > self.column_index:
                             nx, ny = self._next_position("u")
+
+                        elif self.y >= self.column_index:
+                            nx, ny = self._next_position("d")
                         print(f"Agent: {self.seat}: No one is sitting in the way, taking a seat.")
                         #time.sleep(1)
                         print(f"Agent {self.seat}: seated.")
