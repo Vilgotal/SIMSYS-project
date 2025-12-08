@@ -4,6 +4,7 @@ from agent import *
 
 
 
+
 # Parameters
 rows = 30
 left_col = 3
@@ -15,6 +16,3 @@ print(test1.position)
 
 print(test2.aisle_indices)
 
-# Main loopasdfasdfa
-sortedasdf
-asdf
