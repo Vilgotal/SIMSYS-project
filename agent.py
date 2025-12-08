@@ -1,13 +1,13 @@
 import time
 class Agent:
-    def __init__(self, seat, x=-3, y=3):
+    def __init__(self, seat = "", spawn = []):
 
         self.seat = seat # string
         self.row, self.column_letter = self._parse_seat(seat) # int, string
         self.layout = "3-3"
-        self.x = x
-        self.y = y
-        self.boarding_group = 0
+        self.x = spawn[0]
+        self.y = spawn[1]
+        self.boarding_group = None
         self.seated = False
 
         # build column mapping with aisles included
@@ -40,7 +40,7 @@ class Agent:
             letters = ["A","B","C","D","E","F"]
             # Aisle between C and D → aisle index = 3
             col_map = {letters[i]: i + (1 if i >= 3 else 0) for i in range(6)}
-            aisle_indices = {3}
+            aisle_indices = 3
 
         elif self.layout == "3-3-3":
             letters = ["A","B","C","D","E","F","G","H","I"]
@@ -69,8 +69,8 @@ class Agent:
         if direction == "r": return self.x + 1, self.y
         raise ValueError("Invalid direction")
 
-    def is_occupied(self, x, y):
-        return (x, y) in self.occupied
+    # def is_occupied(self, x, y):
+    #     return (x, y) in self.occupied
 
     def move(self, other_agents = None):
         
@@ -81,7 +81,7 @@ class Agent:
             self.x, self.y = self._next_position("r")
             if self.x < self.row:
                 print(f"Agent: {self.seat}: moves forward")
-                self.x = nxs
+                time.sleep(1.2)
                 print(f"Agent: {self.seat}: curr pos: {self.x}")
                 return True
             elif self.x == self.row:
@@ -89,13 +89,16 @@ class Agent:
                     print(f"Agent: {self.seat}: Person sitting in the way, taking a little longer to be seated.")
                     time.sleep(5)
                     print(f"Agent {self.seat}: seated.")
-                    return False
+                    self.y = self.column_index
+                    print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
+                    self.seated = True
+                    return True
                 else:
                     print(f"Agent: {self.seat}: No one is sitting in the way, taking a seat.")
                     time.sleep(1)
                     print(f"Agent {self.seat}: seated.")
-                    self.x = nx
-                    self.y = ny
+                    self.y = self.column_index
+                    print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
                     self.seated = True
                     return True
             else:
@@ -104,7 +107,7 @@ class Agent:
     def position(self):
         return (self.x, self.y)
 
-    def is_blocked_by_seated(self, other_agents = list):
+    def is_blocked_by_seated(self, other_agents = []):
         """
         direct integer range check between seat column and nearest aisle index
         """
@@ -113,7 +116,7 @@ class Agent:
         my_col = self.column_index
 
 
-        if my_col < self.aisle_indices:
+        if my_col < int(self.aisle_indices):
             col_range = range(my_col, int(self.aisle_indices))
         else:
             col_range = range(self.aisle_indices+1, my_col)

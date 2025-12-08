@@ -6,6 +6,7 @@ from agent import *
 
 class Visuals:
     def __init__(self, rows: int, columns: int, amount_of_ailes: int, ailes_width: int, corridor_row: int, cell_size=40):
+        
         self.rows = rows
         self.columns = columns
         self.amount_of_ailes = int(amount_of_ailes)
@@ -159,7 +160,9 @@ class Visuals:
     #             return boundaries
 
 
-        return
+    def update_passengers(passenger_list = []):
+        for passenger in passenger_list:
+
 
 
 visual_system = Visuals(rows=30, columns=6, amount_of_ailes=1, ailes_width=3,corridor_row=2)
