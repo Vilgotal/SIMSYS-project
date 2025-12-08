@@ -2,6 +2,7 @@ import tkinter as tk
 from alphabet import alphabet_upper
 import numpy as np
 from agent import *
+import time
 
 
 class Visuals:
@@ -9,7 +10,7 @@ class Visuals:
 
         self.rows = rows
         self.columns = columns
-        self.amount_of_ailes = int(amount_of_ailes)
+        self.amount_of_ailes = amount_of_ailes
         self.ailes_width = ailes_width
         self.cell_size = cell_size
         self.corridor_row = corridor_row
@@ -33,7 +34,6 @@ class Visuals:
         
     def start(self):
         self.root.mainloop()
-
 
     def seat_indexer(self):
         """Generates the indexes of the seats 
@@ -73,7 +73,6 @@ class Visuals:
             return {0, self.rows // 2, self.rows - 1}
         elif self.corridor_row < 0 or self.corridor_row > 3:
             raise ValueError("corridor_row needst to be between 1-3")
-
         else:
             return set()
     
@@ -160,28 +159,54 @@ class Visuals:
     #                 boundaries.append([[x1,y1],[x2,y2]])
     #             return boundaries
 
+
     def draw_passenger(self, passenger):
         px = passenger.x * self.cell_size
         py = passenger.y * self.cell_size
         
         r = self.radius
-        return self.canvas.create_oval(
+        passenger.set_tinker_object(self.canvas.create_oval(
             px + self.cell_size/2 - r,
             py + self.cell_size/2 - r,
             px + self.cell_size/2 + r,
             py + self.cell_size/2 + r,
             fill="black",
             outline="black"
-        )
-    def update_passengers(self, passenger_list = []):
+        ))
+        passenger.set_tinker_text(self.canvas.create_text(px + self.cell_size/2 ,
+            py + self.cell_size/2,
+            text=passenger.seat,
+            fill="white",
+            font=("Times", 10)
+            ))
+
+    def update_passenger_position(self, passenger):
+        px = passenger.x * self.cell_size
+        py = passenger.y * self.cell_size
+        r = self.radius
+
+        self.canvas.coords(passenger.tinkerobject, px + self.cell_size/2 - r,
+            py + self.cell_size/2 - r,
+            px + self.cell_size/2 + r,
+            py + self.cell_size/2 + r)
+        self.canvas.coords(passenger.tinkertext, px + self.cell_size/2 ,
+            py + self.cell_size/2)
+
+
+
+    def update_passengers(self, passenger_list):
         if passenger_list is None:
             passenger_list = []
 
-        self.canvas.delete("all")     # rensa allt
-        self.draw_grid()              # rita grid först
 
         for p in passenger_list:
-            self.draw_passenger(p)    # sedan passagerare
+            if p.spawned == False:
+                self.draw_passenger(p)
+                    # sedan passagerare
+                #p.spawned = True
+            else:
+                self.update_passenger_position(p)
+                
 
         return True
 

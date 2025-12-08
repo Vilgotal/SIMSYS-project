@@ -1,15 +1,21 @@
 import time
+from queue import Queue
+
 class Agent:
     def __init__(self, seat = "", spawn = []):
 
-        self.seat = seat # string
-        self.row, self.column_letter = self._parse_seat(seat) # int, string
-        self.layout = "3-3"
+        self.seat = seat        # string 13A
+        self.row, self.column_letter = self._parse_seat(seat) # int, string 13, A
+        self.layout = "3-3" 
         self.x = spawn[0]
         self.y = spawn[1]
-        self.boarding_group = None
-        self.seated = False
-
+        self.boarding_group = None 
+        self.seated = False             
+        self.spawned = False            
+        self.tinkerobject = None
+        self.tinkertext = None
+        self.blocked = False
+        self.waiting_queue = Queue()
         # build column mapping with aisles included
         self.column_map, self.aisle_indices = self._build_column_map()
         self.column_index = self.column_map[self.column_letter] # column int
@@ -17,6 +23,12 @@ class Agent:
     def set_boarding_group(self, number):
         self.boarding_group = number
         return self.boarding_group 
+    
+    def set_tinker_object(self, tinkerobject):
+        self.tinkerobject = tinkerobject
+
+    def set_tinker_text(self, tinkertext):
+        self.tinkertext = tinkertext
 
     def _parse_seat(self, seat):
         num = ""
@@ -78,31 +90,47 @@ class Agent:
             print(f"Agent: {self.seat}: agent is seated.")
             return False
         else:
-            self.x, self.y = self._next_position("r")
-            if self.x < self.row:
-                print(f"Agent: {self.seat}: moves forward")
-                time.sleep(1.2)
-                print(f"Agent: {self.seat}: curr pos: {self.x}")
-                return True
-            elif self.x == self.row:
-                if self.is_blocked_by_seated(other_agents):
-                    print(f"Agent: {self.seat}: Person sitting in the way, taking a little longer to be seated.")
-                    time.sleep(5)
-                    print(f"Agent {self.seat}: seated.")
-                    self.y = self.column_index
-                    print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
-                    self.seated = True
-                    return True
-                else:
-                    print(f"Agent: {self.seat}: No one is sitting in the way, taking a seat.")
-                    time.sleep(1)
-                    print(f"Agent {self.seat}: seated.")
-                    self.y = self.column_index
-                    print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
-                    self.seated = True
-                    return True
+            nx, ny = self._next_position("r")
+            for a in other_agents:
+                if a.x == nx and a.y == ny:
+                    print(f"Blocked py agent {a.seat}")
+                    self.blocked == True
+            if self.blocked:
+                self.blocked = False
+                return self.blocked
             else:
-                raise SyntaxError("Fel i Agent.move()")
+                if nx <= self.row:
+                    print(f"Agent: {self.seat}: moves forward")
+                    #time.sleep(0.5)
+                    self.x = nx
+                    print(f"Agent: {self.seat}: curr pos: {self.x}")
+                    return
+                elif self.x == self.row:
+                    if self.is_blocked_by_seated(other_agents):
+                        print(f"Agent: {self.seat}: Person sitting in the way, taking a little longer to be seated.")
+                        #time.sleep(5)
+                        print(f"Agent {self.seat}: seated.")
+                        self.y = self.column_index
+                        print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
+                        self.seated = True
+                        
+                        return
+                    else:
+                        if self.y < self.column_index:
+                            nx, ny = self._next_position("d")
+
+                        elif self.y > self.column_index:
+                            nx, ny = self._next_position("u")
+                        print(f"Agent: {self.seat}: No one is sitting in the way, taking a seat.")
+                        #time.sleep(1)
+                        print(f"Agent {self.seat}: seated.")
+                        self.y = ny
+                        print(f"Agent: {self.seat}: curr pos: {self.x}, {self.y}")
+                        if self.y == self.column_index:
+                            self.seated = True
+                else:
+                    raise SyntaxError("Fel i Agent.move()")
+                
 
     def position(self):
         return (self.x, self.y)

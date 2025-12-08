@@ -1,5 +1,6 @@
 from agent import *
 import scipy as sci
+import time
 from Visual import Visuals
 def generate_manifest(rows, left_col, right_col):
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -23,27 +24,37 @@ def generate_manifest(rows, left_col, right_col):
 
 
 # Parameterss
-rows = 30
+rows = 28
 left_col = 3
 right_col = 3
 pass_per_row = left_col + right_col
 n_passengers = pass_per_row * rows
-spawn_loc = [-3, 3]
+spawn_loc = [0, 3]
 
 
 
 manifest = generate_manifest(rows, left_col, right_col)
-#agents = [Agent(seat, spawn_loc) for seat in manifest]
+agents = [Agent(seat, spawn_loc) for seat in manifest]
 
-test1 = Agent(seat = "13B", spawn = [3,3])
+# test1 = Agent(seat = "3B", spawn = [0,3])
+# test2 = Agent(seat="5A", spawn = [0,3])
 
 # Main loop
 
 
 visual_system = Visuals(rows=30, columns=6, amount_of_ailes=1, corridor_row=2, ailes_width=1)
-visual_system.update_passengers(passenger_list = [test1])
-for i in range(10):
-    test1.move()
-    visual_system.update_passengers(passenger_list = [test1])
-visual_system.start()
+visual_system.update_passengers(passenger_list = agents)
+visual_system.draw_grid()
+for i in range(100):
+    for a in agents:
+        visual_system.canvas.delete(a.tinkerobject, a.tinkertext)
+        a.move(other_agents = agents)
+    time.sleep(1)
+    visual_system.update_passengers(passenger_list = agents)
+    visual_system.root.update_idletasks()
+    visual_system.root.update()
 
+
+visual_system.root.update_idletasks()
+visual_system.root.update()
+visual_system.root.mainloop()
