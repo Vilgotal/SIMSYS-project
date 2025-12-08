@@ -107,7 +107,7 @@ class Agent:
     def position(self):
         return (self.x, self.y)
 
-    def is_blocked_by_seated(self, other_agents = []):
+    def is_blocked_by_seated(self, other_agents = None):
         """
         direct integer range check between seat column and nearest aisle index
         """
@@ -120,13 +120,13 @@ class Agent:
             col_range = range(my_col, int(self.aisle_indices))
         else:
             col_range = range(self.aisle_indices+1, my_col)
-
-        for other in other_agents:
-            if not other.seated:
-                continue
-            if other.row != my_row:
-                continue
-            if other.column_index in col_range:
-                return True
+        if other_agents:
+            for other in other_agents:
+                if not other.seated:
+                    continue
+                if other.row != my_row:
+                    continue
+                if other.column_index in col_range:
+                    return True
 
         return False

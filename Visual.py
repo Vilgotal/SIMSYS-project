@@ -6,14 +6,14 @@ from agent import *
 
 class Visuals:
     def __init__(self, rows: int, columns: int, amount_of_ailes: int, ailes_width: int, corridor_row: int, cell_size=40):
-        
+
         self.rows = rows
         self.columns = columns
         self.amount_of_ailes = int(amount_of_ailes)
         self.ailes_width = ailes_width
         self.cell_size = cell_size
         self.corridor_row = corridor_row
-
+        self.radius = self.cell_size/5
 
         self.root = tk.Tk()
         self.root.title("Seat Grid")
@@ -30,9 +30,9 @@ class Visuals:
 
         self.draw_grid()
 
-        self.root.mainloop()
         
-
+    def start(self):
+        self.root.mainloop()
 
 
     def seat_indexer(self):
@@ -76,6 +76,7 @@ class Visuals:
 
         else:
             return set()
+    
 
     def draw_grid(self):
         if not isinstance(self.rows, int) or not isinstance(self.columns, int):
@@ -159,10 +160,29 @@ class Visuals:
     #                 boundaries.append([[x1,y1],[x2,y2]])
     #             return boundaries
 
+    def draw_passenger(self, passenger):
+        px = passenger.x * self.cell_size
+        py = passenger.y * self.cell_size
+        
+        r = self.radius
+        return self.canvas.create_oval(
+            px + self.cell_size/2 - r,
+            py + self.cell_size/2 - r,
+            px + self.cell_size/2 + r,
+            py + self.cell_size/2 + r,
+            fill="black",
+            outline="black"
+        )
+    def update_passengers(self, passenger_list = []):
+        if passenger_list is None:
+            passenger_list = []
 
-    def update_passengers(passenger_list = []):
-        for passenger in passenger_list:
+        self.canvas.delete("all")     # rensa allt
+        self.draw_grid()              # rita grid först
+
+        for p in passenger_list:
+            self.draw_passenger(p)    # sedan passagerare
+
+        return True
 
 
-
-visual_system = Visuals(rows=30, columns=6, amount_of_ailes=1, ailes_width=3,corridor_row=2)

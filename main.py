@@ -35,11 +35,15 @@ spawn_loc = [-3, 3]
 manifest = generate_manifest(rows, left_col, right_col)
 #agents = [Agent(seat, spawn_loc) for seat in manifest]
 
-test1 = Agent(seat = "13B", spawn = [0,3])
+test1 = Agent(seat = "13B", spawn = [3,3])
 
 # Main loop
 
 
-visual_system = Visuals(rows=30, columns=6, amount_of_ailes=1, ailes_width=1)
-visual_system.update(passengers = [test1])
+visual_system = Visuals(rows=30, columns=6, amount_of_ailes=1, corridor_row=2, ailes_width=1)
+visual_system.update_passengers(passenger_list = [test1])
+for i in range(10):
+    test1.move()
+    visual_system.update_passengers(passenger_list = [test1])
+visual_system.start()
 
