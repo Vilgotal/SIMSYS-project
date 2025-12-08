@@ -4,7 +4,7 @@ from agent import *
 
 
 
-# Parameters
+# Parameterss
 rows = 30
 left_col = 3
 right_col = 3

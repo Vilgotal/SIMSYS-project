@@ -81,7 +81,7 @@ class Agent:
             self.x, self.y = self._next_position("r")
             if self.x < self.row:
                 print(f"Agent: {self.seat}: moves forward")
-                self.x = nx
+                self.x = nxs
                 print(f"Agent: {self.seat}: curr pos: {self.x}")
                 return True
             elif self.x == self.row:
