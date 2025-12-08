@@ -1,16 +1,12 @@
 import time
 class Agent:
-    def __init__(self, seat, layout="3-3", x=-3, y=3,
-                 grid_width=None, grid_height=None):
+    def __init__(self, seat, x=-3, y=3):
 
         self.seat = seat # string
         self.row, self.column_letter = self._parse_seat(seat) # int, string
-        self.layout = layout
-
+        self.layout = "3-3"
         self.x = x
         self.y = y
-        self.grid_width = grid_width
-        self.grid_height = grid_height
         self.boarding_group = 0
         self.seated = False
 
@@ -77,28 +73,33 @@ class Agent:
         return (x, y) in self.occupied
 
     def move(self, other_agents = None):
+        
         if self.seated == True:
-            print("agent is seated")
+            print(f"Agent: {self.seat}: agent is seated.")
             return False
-        elif self.x < self.row:
-
-            nx, ny = self._next_position("r")
-            return True
-        elif self.x == self.row:
-            if self.is_blocked_by_seated(other_agents):
-                print("person sitting in the way, taking a little longer to be seated")
-                time.sleep(5)
-
-                return False
-            else:
-                print("No one is sitting in the way, taking a seat waiting one")
-                time.sleep(1)
-                self.x = nx
-                self.y = ny
-                self.seated = True
-                return True
         else:
-            raise SyntaxError("Fel i Agent.move()")
+            self.x, self.y = self._next_position("r")
+            if self.x < self.row:
+                print(f"Agent: {self.seat}: moves forward")
+                self.x = nx
+                print(f"Agent: {self.seat}: curr pos: {self.x}")
+                return True
+            elif self.x == self.row:
+                if self.is_blocked_by_seated(other_agents):
+                    print(f"Agent: {self.seat}: Person sitting in the way, taking a little longer to be seated.")
+                    time.sleep(5)
+                    print(f"Agent {self.seat}: seated.")
+                    return False
+                else:
+                    print(f"Agent: {self.seat}: No one is sitting in the way, taking a seat.")
+                    time.sleep(1)
+                    print(f"Agent {self.seat}: seated.")
+                    self.x = nx
+                    self.y = ny
+                    self.seated = True
+                    return True
+            else:
+                raise SyntaxError("Fel i Agent.move()")
 
     def position(self):
         return (self.x, self.y)
