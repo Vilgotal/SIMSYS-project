@@ -82,6 +82,7 @@ while not_all_seated:
 
 
 
+
 visual_system.root.update_idletasks()
 visual_system.root.update()
 visual_system.root.mainloop()

@@ -1,6 +1,6 @@
 import time
 import numpy as np
-
+import random
 ### What to fix
 # boundary box around player. 
 # different speeds for different players?
@@ -23,7 +23,7 @@ class Agent:
         self.blocked = False
         self.seat_pause = 0
         self.luggage_pause = 0
-        self.lug_storage_probability = np.
+        self.lug_storage_probability = random.gauss(0,1)
         
 
         self.column_map, self.aisle_indices = self._build_column_map()
@@ -133,9 +133,9 @@ class Agent:
             else: 
                 self.seated = False
         elif self.x == self.row:
-            if self.y == self.aisle_indices:
-                pass#has luggage, make a paus. then move towards seat?
-            if self.y == self.column_index:
+            if self.y == self.aisle_indices and self.luggage_pause < 3 and self.lug_storage_probability < 0.5:
+                self.luggage_pause += 1           #has luggage, make a paus. then move towards seat?
+            elif self.y == self.column_index:
                 self.seated = True
             elif abs(3 - self.column_index) == 1: # if desired seat is aisle seat, then just sit down, doesn't matter.
                 self.y = self.column_index

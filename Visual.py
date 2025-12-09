@@ -166,6 +166,8 @@ class Visuals:
 
         if passenger.seated:
             col = "green"
+        elif passenger.luggage_pause > 0 and passenger.luggage_pause < 3:
+            col = "red"
         elif passenger.boarding_group == 1:
             col = "#F1C27D"
         elif passenger.boarding_group == 2:
