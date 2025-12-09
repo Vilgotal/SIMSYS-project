@@ -2,6 +2,9 @@ from agent import *
 import scipy as sci
 import time
 from Visual import Visuals
+import random
+from boarding_methods import *
+
 def generate_manifest(rows, left_col, right_col):
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -17,101 +20,42 @@ def generate_manifest(rows, left_col, right_col):
     for r in range(1, rows + 1):
         for L in all_letters:
             manifest.append(f"{r}{L}")
-
     return manifest
 
 
 
-def steffen_method(rows,left_col,right_col):
-    seats = generate_manifest(rows,left_col,right_col)
-
-    left_window_odd_seats = []
-    left_window_even_seats = []
-
-    right_window_odd_seats = []
-    right_window_even_seats = []
-
-
-    left_middle_odd_seats = []
-    left_middle_even_seats = []
-
-    right_middle_odd_seats = []
-    right_middle_even_seats = []
-
-    left_aisle_odd_seats = []
-    right_aisle_even_seats = []
-
-    counter = 0
-    for i in seats:
-        #window seats, and also check even or odd number
-        if counter == 0 or counter%6 == 0:
-            if counter%2 ==0:
-                if "A" in i:
-                    left_window_even_seats.append(i)
-                elif "F" in i:
-                    right_window_even_seats.append(i)
-                else: print("Seems to be wrong in the even window seating")
-            else:
-                if "A" in i:
-                    left_window_odd_seats.append(i)
-                elif "F" in i:
-                    right_window_odd_seats.append(i)
-                else: print("Seems to be wrong in the odd window seating")
-
-
-        #Middle seats, and also check even or odd number
-        if counter == 1 or (counter-1)%6==0:
-            if counter%2 ==0:
-                if "B" in i:
-                    left_middle_even_seats.append(i)
-                elif "E" in i:
-                    right_middle_even_seats.append(i)
-                else:
-                    print("No B or E in middle even seats")
-            else:
-                if "B" in i:
-                    left_window_odd_seats.append(i)
-                elif "E" in i:
-                    right_window_odd_seats.append(i)
-                else:    
-                    print("No B or E in middle odd seats")
-
-
-
-            if "B" in i:
-                left_middle_seats.append(i)
-            else:
-                right_middle_seats.append(i)
-        if counter ==2 or counter-2%6 == 0:
-            if "C" in i:
-                left_aisle_seats.append(i)
-            else:
-                right_aisle_seats.append(i)
-    merged_list = left_window_seats+right_window_seats+        
-
-    
-
-
-
-    return
-
 # Parameterss
-rows = 10
+rows = 30 
 left_col = 3
 right_col = 3
 column = left_col + right_col
-n_passengers = column * rows
+
+
+
+# n_passengers = column * rows
 spawn_loc = [0, 3]
 
+seats = generate_manifest(rows, left_col, right_col)
 
 
-manifest = generate_manifest(rows, left_col, right_col)
-agents = [Agent(seat, spawn_loc) for seat in manifest]
 
 
-import random
+question = True
+while question:
+    print("Press 1+ enter to simulate Wilma method")
+    print("Press 2 + enter to simulate Steffen method")
+    method = int(input('Which method do you want to simulate?'))
 
-agents.sort(key=lambda p: (-p.row, random.random()))
+    if method == 1:
+        agents = wilma_method_seatinput(seats,spawn_loc)
+        question = False
+    elif method == 2:
+        agents = steffen_method(seats,spawn_loc)
+        quesiotn = False
+
+    else: 
+        print("wrong input you need to press 1 or 2!")
+
 
 #Main loop
 
@@ -131,7 +75,7 @@ while not_all_seated:
         others = agents[:i] + agents[i+1:]
         a.move(other_agents = others)
 
-    time.sleep(0.5)
+    time.sleep(0.3)
     visual_system.update_passengers(passenger_list = agents)
     visual_system.root.update_idletasks()
     visual_system.root.update()

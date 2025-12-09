@@ -166,8 +166,18 @@ class Visuals:
 
         if passenger.seated:
             col = "green"
+        elif passenger.boarding_group == 1:
+            col = "#F1C27D"
+        elif passenger.boarding_group == 2:
+            col = "#E0AC69"
+        elif passenger.boarding_group == 3:
+            col = "#C68642"
+        elif passenger.boarding_group == 4:
+            col = "#8D5524"
+        elif passenger.boarding_group == 5:
+            col = "#FFDBAC"
         else:
-            col = "black"
+            col = "#C68642"
         r = self.radius
         passenger.set_tinker_object(self.canvas.create_oval(
             px + self.cell_size/2 - r,
