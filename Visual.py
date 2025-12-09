@@ -8,7 +8,7 @@ import time
 class Visuals:
     def __init__(self, rows: int, columns: int, amount_of_ailes: int, ailes_width: int, corridor_row: int, cell_size=40):
 
-        self.rows = rows
+        self.rows = rows+2
         self.columns = columns
         self.amount_of_ailes = amount_of_ailes
         self.ailes_width = ailes_width
@@ -163,14 +163,18 @@ class Visuals:
     def draw_passenger(self, passenger):
         px = passenger.x * self.cell_size
         py = passenger.y * self.cell_size
-        
+
+        if passenger.seated:
+            col = "green"
+        else:
+            col = "black"
         r = self.radius
         passenger.set_tinker_object(self.canvas.create_oval(
             px + self.cell_size/2 - r,
             py + self.cell_size/2 - r,
             px + self.cell_size/2 + r,
             py + self.cell_size/2 + r,
-            fill="black",
+            fill=col,
             outline="black"
         ))
         passenger.set_tinker_text(self.canvas.create_text(px + self.cell_size/2 ,
