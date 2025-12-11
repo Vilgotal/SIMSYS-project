@@ -106,11 +106,9 @@ class Agent:
         """
         direct integer range check between seat column and nearest aisle index
         """
-
         my_row = self.row
         my_col = self.column_index
 
-        # Minimal fix: säkerställ att aisle behandlas som int och skapa ett konsekvent, exklusivt intervall
         aisle = int(self.aisle_indices)
 
         if my_col < aisle:

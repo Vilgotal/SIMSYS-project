@@ -1,32 +1,30 @@
 import tkinter as tk
-from alphabet import alphabet_upper
-import numpy as np
+#import numpy as np
 from agent import *
 import time
 
 
 class Visuals:
-    def __init__(self, rows: int, columns: int, amount_of_ailes: int, ailes_width: int, corridor_row: int, cell_size=40):
+    def __init__(self, rows: int, columns: int, amount_of_ailes: int, corridor_row: int, method_name, cell_size=40):
 
         self.rows = rows+1
         self.columns = columns
         self.amount_of_ailes = amount_of_ailes
-        self.ailes_width = ailes_width
+        self.method_name = method_name
         self.cell_size = cell_size
         self.corridor_row = corridor_row
         self.radius = self.cell_size/4
 
         self.root = tk.Tk()
-        self.root.title("Seat Grid")
+        self.root.title(f"{self.method_name}")
 
         self.canvas = tk.Canvas(
             self.root,
-            width=self.rows * self.cell_size,                       # rows -> width
-            height=(self.columns + self.amount_of_ailes) * self.cell_size,  # columns -> height
+            width=self.rows * self.cell_size,
+            height=(self.columns + self.amount_of_ailes) * self.cell_size,
             bg="white"
         )
         self.canvas.pack()
-        #self.boundaries_list = self.boundaries()
         self.seats = self.seat_indexer()
 
         self.draw_grid()
@@ -41,6 +39,12 @@ class Visuals:
         Returns:
             seats: list[str]
         """
+        alphabet_upper = [
+            "A", "B", "C", "D", "E", "F", "G",
+            "H", "I", "J", "K", "L", "M", "N",
+            "O", "P", "Q", "R", "S", "T", "U",
+            "V", "W", "X", "Y", "Z"
+        ]
         seats = []
         for row in range(self.rows):
             for col in range(self.columns):
@@ -165,9 +169,26 @@ class Visuals:
         py = passenger.y * self.cell_size
 
         if passenger.seated:
-            col = "green"
+            #col = "green"
+            if passenger.boarding_group == 0:
+                col = "#E6F9E6"   # mycket ljusgrön
+            elif passenger.boarding_group == 1:
+                col = "#B3F2B3"   # ljusgrön
+            elif passenger.boarding_group == 2:
+                col = "#66E066"   # klar grön
+            elif passenger.boarding_group == 3:
+                col = "#33B533"   # mellanmörk grön
+            elif passenger.boarding_group == 4:
+                col = "#008000"   # mörkgrön
+            elif passenger.boarding_group == 5:
+                col = "#004D00"   # mycket mörkgrön
+            else:
+                col = "green"
+
         elif passenger.luggage_pause > 0 and passenger.luggage_pause < 3:
             col = "red"
+        elif passenger.seat_pause > 0:
+            col = "pink"
         elif passenger.boarding_group == 1:
             col = "#F1C27D"
         elif passenger.boarding_group == 2:
@@ -191,9 +212,9 @@ class Visuals:
         ))
         passenger.set_tinker_text(self.canvas.create_text(px + self.cell_size/2 ,
             py + self.cell_size/2,
-            text=passenger.seat,
-            fill="white",
-            font=("Times", 10)
+            text = (passenger.boarding_group + 1) if passenger.boarding_group != None else passenger.seat,                
+            fill="black",
+            font=("Times", 12)
             ))
 
     def update_passenger_position(self, passenger):

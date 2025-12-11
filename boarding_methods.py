@@ -12,7 +12,7 @@ def wilma_method(seats,spawn_loc):
         2: 2, 4: 2}
     for a in agents:
         a.boarding_group = priority.get(a.column_index, 3)
-    agents.sort(key=lambda p: (priority.get(p.column_index, 3), random.random()))
+    agents.sort(key=lambda p: (p.boarding_group, random.random()))
     return agents
 
 def get_priority(num):
@@ -35,6 +35,61 @@ def random_order_method(seats, spawn_loc):
     agents.sort(key=lambda _: random.random())
     return agents
 
+def hugo_method(seats, spawn_loc):
+    agents = [Agent(seat, spawn_loc) for seat in seats]
+    max_seat = agents[-1].row
+    priority_col = {
+        0: 0, 6: 0,
+        1: 1, 5: 1,
+        2: 2, 4: 2}
+    priority = {
+        (0,0): 1, (1,0): 2, (2,0): 3,
+        (0,1): 1, (1,1): 2, (2,1): 3,
+        (0,2): 1, (1,2): 2, (2,2): 3,
+        (0,3): 0, (1,3): 2, (2,3): 3,
+        (0,4): 0, (1,4): 1, (2,4): 2,
+        (0,5): 0, (1,5): 0, (2,5): 1,
+        (0,6): 0, (1,6): 0, (2,6): 1,
+        }
+    for a in agents: 
+        a.boarding_group = priority.get((priority_col.get(a.column_index), (a.row - 1) // 6), 4)
+    agents.sort(key=lambda p: (p.boarding_group, random.random()))
+    return agents
+
+def vilgot_method(seats,spawn_loc):
+    agents = [Agent(seat, spawn_loc) for seat in seats]
+
+
+    inner_third = [agents[-1].row,agents[-1].row-agents[-1].row//3]
+    middle_third = [inner_third[-1],inner_third[-1]-agents[-1].row//3]
+    closest_third = [middle_third[-1],middle_third[-1]-agents[-1].row//3]
+
+    inner_third = np.arange(int(inner_third[0]),int(inner_third[1]),-1)
+    middle_third = np.arange(int(middle_third[0]),int(middle_third[1]),-1)
+    closest_third = np.arange(int(closest_third[0]),int(closest_third[1]),-1)
+
+
+    for a in agents:
+        if a.row in inner_third:
+            if a.column_index <3:
+                a.boarding_group = 0
+            else:
+                a.boarding_group = 2
+
+        if a.row in middle_third:
+            if a.column_index<3:
+                a.boarding_group = 4
+            else:
+                a.boarding_group = 1
+
+        if a.row in closest_third:
+            if a.column_index<3:
+                a.boarding_group = 3
+            else:
+                a.boarding_group = 5
+
+    agents.sort(key=lambda p: (p.boarding_group, random.random()))
+    return agents
 
 #### Not working right now
 # def reversed_pyramid_method(seats, spawn_loc):

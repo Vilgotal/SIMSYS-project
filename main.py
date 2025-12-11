@@ -62,7 +62,7 @@ seats = generate_manifest(rows, left_col, right_col)
 #         print("wrong input you need to press 1 or 2!")
 
 # WILMA, BTF, RANDOM, STEFFEN METHOD
-methods_list = [random_order_method, wilma_method, btf_method, steffen_method]
+methods_list = [wilma_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
 
 methods_steps = []
 
@@ -70,9 +70,9 @@ methods_steps = []
 for f in methods_list:
     steps_list = []
     print(str(f.__name__))
-    for i in range(0,1):
+    for i in range(0,10):
         agents = f(seats,spawn_loc)
-        visual_system = Visuals(rows, column, amount_of_ailes=1, corridor_row=1, ailes_width=1)
+        visual_system = Visuals(rows, column, amount_of_ailes=1, method_name = f.__name__, corridor_row=1)
         visual_system.update_passengers(passenger_list = agents)
         visual_system.draw_grid()
         steps = 0
@@ -88,7 +88,7 @@ for f in methods_list:
                 others = agents[:i] + agents[i+1:]
                 a.move(other_agents = others)
 
-            time.sleep(0.000000001)
+            time.sleep(0.04)
             visual_system.update_passengers(passenger_list = agents)
             visual_system.root.update_idletasks()
             visual_system.root.update()
@@ -100,17 +100,31 @@ for f in methods_list:
 means = []
 errors = []
 
-
 for i, f in enumerate(methods_list):
+    # data = methods_steps[i]
+    # means.append(np.mean(data))
+    # errors.append(np.std(data))   # or std/np.sqrt(n) for SEM
     data = methods_steps[i]
-    means.append(np.mean(data))
-    errors.append(np.std(data))   # or std/np.sqrt(n) for SEM
+    mean = np.mean(data)
+    err = np.std(data)
 
-x = range(len(methods_list))
+    plt.errorbar(
+        i, [mean], yerr=[err],
+        fmt='o', capsize=5, label=f.__name__
+    )
+    
+# x = range(len(methods_list))
 
-plt.errorbar(x, means, yerr=errors, fmt='o', capsize=5)
-plt.xticks(x, methods_list)
-plt.xlabel("Boarding Method")
+# plt.errorbar(x, means, yerr=errors, fmt='o', capsize=5)
+# plt.xticks(x, methods_list)
+# plt.xlabel("Boarding Method")
+# plt.ylabel("Timesteps")
+# plt.title("Boarding Time Comparison")
+# plt.show()
+
+
+plt.xticks([])  # no x-axis labels
 plt.ylabel("Timesteps")
 plt.title("Boarding Time Comparison")
+plt.legend(loc="best")
 plt.show()
