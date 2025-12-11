@@ -24,11 +24,11 @@ class Agent:
         self.seat_pause = 0
         self.luggage_pause = 0
         # Parameters that can be changed:
-        self.lug_storage_probability = random.gauss(0,1)
-        self.luggage_pause_parameter = 3 # amount of timesteps it takes to store away luggage
-        self.desired_middle_aisle_occupied = 3 # amount of timesteps if <---
-        self.desired_window_aisle_occupied = 5 # amount of timesteps if <---
-        self.desired_window_middle_occupied = 10 # amount of timesteps if <---
+        self.lug_storage_probability = random.random()
+        self.luggage_pause_parameter = random.gauss(5,1) # amount of timesteps it takes to store away luggage
+        self.desired_middle_aisle_occupied = random.gauss(3,1) # amount of timesteps if <---
+        self.desired_window_aisle_occupied = random.gauss(5,1) # amount of timesteps if <---
+        self.desired_window_middle_occupied = random.gauss(10,2) # amount of timesteps if <---
         self.luggage_chance = 0.8
 
 
@@ -116,7 +116,7 @@ class Agent:
             col_range = np.arange(my_col + 1, aisle)
         else:
             col_range = np.arange(aisle + 1, my_col)
-
+        same_row = False
         if other_agents:
             for other in other_agents:
                 if not other.seated:
@@ -125,10 +125,13 @@ class Agent:
                     continue
                 elif other.column_index in col_range:
                     if abs(other.column_index-aisle) == 1:
-                        return 1
+                        same_row = True
                     elif abs(other.column_index-aisle) ==2:
                         return 2
-        return 0
+        if same_row:
+            return 1
+        else:
+            return 0
 
 
     def move(self, other_agents = None): 

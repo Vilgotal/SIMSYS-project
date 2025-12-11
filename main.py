@@ -62,7 +62,7 @@ seats = generate_manifest(rows, left_col, right_col)
 #         print("wrong input you need to press 1 or 2!")
 
 # WILMA, BTF, RANDOM, STEFFEN METHOD
-methods_list = [wilma_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
+methods_list = [vilgot_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
 
 methods_steps = []
 
@@ -70,7 +70,7 @@ methods_steps = []
 for f in methods_list:
     steps_list = []
     print(str(f.__name__))
-    for i in range(0,10):
+    for i in range(0,20):
         agents = f(seats,spawn_loc)
         visual_system = Visuals(rows, column, amount_of_ailes=1, method_name = f.__name__, corridor_row=1)
         visual_system.update_passengers(passenger_list = agents)
@@ -113,14 +113,6 @@ for i, f in enumerate(methods_list):
         fmt='o', capsize=5, label=f.__name__
     )
     
-# x = range(len(methods_list))
-
-# plt.errorbar(x, means, yerr=errors, fmt='o', capsize=5)
-# plt.xticks(x, methods_list)
-# plt.xlabel("Boarding Method")
-# plt.ylabel("Timesteps")
-# plt.title("Boarding Time Comparison")
-# plt.show()
 
 
 plt.xticks([])  # no x-axis labels
