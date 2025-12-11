@@ -20,7 +20,7 @@ def get_priority(num):
 
 def btf_method(seats,spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
-    max_seat = agents[-1].row
+    max_seat = agents[-1].row #33
     priority = {
         0: 5, 3: 2,
         1: 4, 4: 1,

@@ -26,7 +26,7 @@ def generate_manifest(rows, left_col, right_col):
 
 
 # Parameterss
-rows = 30 
+rows = 33 
 left_col = 3
 right_col = 3
 column = left_col + right_col
@@ -41,28 +41,7 @@ seats = generate_manifest(rows, left_col, right_col)
 
 
 
-# question = True
-# while question:
-#     print("Press 1+ enter to simulate Wilma method")
-#     print("Press 2 + enter to simulate Steffen method")
-#     print("Press 3 + enter to simulate Back-to-Front method")
-#     method = int(input('Which method do you want to simulate?'))
-
-#     if method == 1:
-#         agents = wilma_method_seatinput(seats,spawn_loc)
-#         question = False
-#     elif method == 2:
-#         agents = steffen_method(seats,spawn_loc)
-#         question = False
-#     elif method == 3:
-#         agents = btf_method(seats,spawn_loc)
-#         question = False
-
-#     else: 
-#         print("wrong input you need to press 1 or 2!")
-
-# WILMA, BTF, RANDOM, STEFFEN METHOD
-methods_list = [vilgot_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
+methods_list = [btf_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
 
 methods_steps = []
 
