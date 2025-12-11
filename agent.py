@@ -23,8 +23,14 @@ class Agent:
         self.blocked = False
         self.seat_pause = 0
         self.luggage_pause = 0
+        # Parameters that can be changed:
         self.lug_storage_probability = random.gauss(0,1)
-        
+        self.luggage_pause_parameter = 3 # amount of timesteps it takes to store away luggage
+        self.desired_middle_aisle_occupied = 3 # amount of timesteps if <---
+        self.desired_window_aisle_occupied = 5 # amount of timesteps if <---
+        self.desired_window_middle_occupied = 10 # amount of timesteps if <---
+        self.luggage_chance = 0.8
+
 
         self.column_map, self.aisle_indices = self._build_column_map()
         self.column_index = self.column_map[self.column_letter] # column int
@@ -84,10 +90,11 @@ class Agent:
         return col_map, aisle_indices
 
     def _next_position(self, direction):
-        if direction == "d": return self.x, self.y - 0.5
-        if direction == "u": return self.x, self.y + 0.5
-        if direction == "l": return self.x - 0.5, self.y
-        if direction == "r": return self.x + 0.5, self.y
+        step_size = 1
+        if direction == "d": return self.x, self.y - step_size
+        if direction == "u": return self.x, self.y + step_size
+        if direction == "l": return self.x - step_size, self.y
+        if direction == "r": return self.x + step_size, self.y
         raise ValueError("Invalid direction")
 
 
@@ -133,7 +140,7 @@ class Agent:
             else: 
                 self.seated = False
         elif self.x == self.row:
-            if self.y == self.aisle_indices and self.luggage_pause < 3 and self.lug_storage_probability < 0.5:
+            if self.y == self.aisle_indices and self.luggage_pause < self.luggage_pause_parameter and self.lug_storage_probability < self.luggage_chance:
                 self.luggage_pause += 1           #has luggage, make a paus. then move towards seat?
             elif self.y == self.column_index:
                 self.seated = True
@@ -142,7 +149,7 @@ class Agent:
                 self.seated = True
             elif abs(3 - self.column_index) == 2: # if desired seat is middle seat, then if aisle seat is used. paus. Other wise go towards seat. 
                 if self.is_blocked_by_seated(other_agents) == 1: # if aisle seat is used.
-                    if self.seat_pause < 10:                     # paus first
+                    if self.seat_pause < self.desired_middle_aisle_occupied:                     # paus first
                         self.seat_pause += 1
                     else:
                         self.y = self.column_index              # then jump to desired seat.
@@ -155,12 +162,12 @@ class Agent:
                         ValueError("error in move. ???!?!?")
             elif abs(3-self.column_index) == 3: # if desired seat is window seat
                 if self.is_blocked_by_seated(other_agents) == 1:
-                    if self.seat_pause < 2:                     # paus first
+                    if self.seat_pause < self.desired_window_aisle_occupied:                     # paus first
                         self.seat_pause += 1
                     else:
                         self.y = self.column_index
                 elif self.is_blocked_by_seated(other_agents) == 2:
-                    if self.seat_pause < 3:                     # paus first
+                    if self.seat_pause < self.desired_window_middle_occupied:                     # paus first
                         self.seat_pause += 1
                     else:
                         self.y = self.column_index

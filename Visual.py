@@ -8,13 +8,13 @@ import time
 class Visuals:
     def __init__(self, rows: int, columns: int, amount_of_ailes: int, ailes_width: int, corridor_row: int, cell_size=40):
 
-        self.rows = rows+2
+        self.rows = rows+1
         self.columns = columns
         self.amount_of_ailes = amount_of_ailes
         self.ailes_width = ailes_width
         self.cell_size = cell_size
         self.corridor_row = corridor_row
-        self.radius = self.cell_size/5
+        self.radius = self.cell_size/4
 
         self.root = tk.Tk()
         self.root.title("Seat Grid")
@@ -123,8 +123,8 @@ class Visuals:
                 # Rita sätet
                 self.canvas.create_rectangle(x1, y1, x2, y2, outline="white")
                 
-                inner_w = int(self.cell_size * 0.6)
-                inner_h = int(self.cell_size * 0.6)
+                inner_w = int(self.cell_size * 0.8)
+                inner_h = int(self.cell_size * 0.8)
                 pad_x = int((self.cell_size - inner_w) // 2)
                 pad_y = int((self.cell_size - inner_h) // 2)
 

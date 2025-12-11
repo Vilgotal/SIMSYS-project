@@ -1,44 +1,13 @@
-from agent import * 
-import random
+def functionr(x):
+    return x+1
 
-def generate_manifest(rows, left_col, right_col):
-    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+def functions(x):
+    return x+3
 
-    # left block: A, B, C
-    left = [letters[i] for i in range(left_col)]
+x = 1
 
-    # right block: next letters: D, E, F
-    right = [letters[i + left_col] for i in range(right_col)]
-
-    all_letters = left + right
-
-    manifest = []
-    for r in range(1, rows + 1):
-        for L in all_letters:
-            manifest.append(f"{r}{L}")
-
-    return manifest
-
-rows = 10
-left_col = right_col = 3
-
-
-def wilma_method_seatinput(seats):
-    agents = [Agent(seat, spawn_loc) for seat in seats]
-    priority = {
-        0: 0, 6: 0,
-        1: 1, 5: 1,
-        2: 2, 4: 2}
-
-    agents.sort(key=lambda p: (priority.get(p.column_index, 3), random.random()))
-    return agents
-
-
-spawn_loc = [0, 3] 
-
-
-manifest = generate_manifest(rows, left_col, right_col)
-wm = wilma_method_seatinput(manifest)
-
-for i in wm:
-    print(i.seat)
+lst = [lambda: functionr(x), lambda: functions(x)]
+for i in range(0,3):
+    for f in lst:
+        r = f()
+        print(r)
