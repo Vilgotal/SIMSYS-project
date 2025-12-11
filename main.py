@@ -70,11 +70,11 @@ methods_steps = []
 for f in methods_list:
     steps_list = []
     print(str(f.__name__))
-    for i in range(0,10):
+    for i in range(0,1):
         agents = f(seats,spawn_loc)
-        # visual_system = Visuals(rows, column, amount_of_ailes=1, corridor_row=1, ailes_width=1)
-        # visual_system.update_passengers(passenger_list = agents)
-        # visual_system.draw_grid()
+        visual_system = Visuals(rows, column, amount_of_ailes=1, corridor_row=1, ailes_width=1)
+        visual_system.update_passengers(passenger_list = agents)
+        visual_system.draw_grid()
         steps = 0
             
         while not all(a.seated for a in agents):
@@ -84,21 +84,19 @@ for f in methods_list:
             agents.sort(key=lambda p: p.x)
 
             for i, a in enumerate(agents):
-                # visual_system.canvas.delete(a.tinkerobject, a.tinkertext)
+                visual_system.canvas.delete(a.tinkerobject, a.tinkertext)
                 others = agents[:i] + agents[i+1:]
                 a.move(other_agents = others)
 
-            #time.sleep(0.000000001)
-            # visual_system.update_passengers(passenger_list = agents)
-            # visual_system.root.update_idletasks()
-            # visual_system.root.update()
+            time.sleep(0.000000001)
+            visual_system.update_passengers(passenger_list = agents)
+            visual_system.root.update_idletasks()
+            visual_system.root.update()
             steps += 1
-
+        visual_system.root.destroy()
         steps_list.append(steps)
     methods_steps.append(steps_list)
-# agents = random_order_method(seats,spawn_loc)
-# for a in agents:
-#     print(f'bg: {a.boarding_group}: seat: {a.seat}')
+
 means = []
 errors = []
 
