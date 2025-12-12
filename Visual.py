@@ -112,11 +112,25 @@ class Visuals:
 
                 aisles_before = sum(1 for a in self.aisle_list if a < j)
                 if j in self.aisle_list:
-                    self.canvas.create_rectangle(
-                        x1, y1, x2, y2,
-                        outline="white", fill="white"
-                    )
+                    if j in self.aisle_list:
+                    # Rita vit ruta för aisle
+                        self.canvas.create_rectangle(
+                            x1, y1, x2, y2,
+                            outline="white", fill="white"
+                        )
+
+                        # Lägg in en högerpil mitt i rutan
+                        self.canvas.create_text(
+                            (x1 + x2) / 2,      # center-x
+                            (y1 + y2) / 2,      # center-y
+                            text="→",
+                            font=("Arial", 20),
+                            fill="black"
+                        )
+
                     continue
+
+
 
                 seat_row_idx = i - sum(1 for c in corridors if c < i)
                 seat_col = j - aisles_before
@@ -148,20 +162,6 @@ class Visuals:
                     fill="black",
                     font=("Times", 10)
                 )
-    
-    # def boundaries(self):
-    #     boundaries = []
-    #     for i in range(self.rows):
-    #         for j in range(self.columns + self.amount_of_ailes): 
-    #             if i == self.corridor_row and i<=self.columns//2 or j in self.aisle_list:
-    #                 continue    
-    #             else:
-    #                 x1 = i * self.cell_size
-    #                 y1 = j * self.cell_size
-    #                 x2 = x1 + self.cell_size
-    #                 y2 = y1 + self.cell_size
-    #                 boundaries.append([[x1,y1],[x2,y2]])
-    #             return boundaries
 
 
     def draw_passenger(self, passenger):
