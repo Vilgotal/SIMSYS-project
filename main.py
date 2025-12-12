@@ -26,7 +26,7 @@ def generate_manifest(rows, left_col, right_col):
 
 
 # Parameterss
-rows = 33 
+rows = 30
 left_col = 3
 right_col = 3
 column = left_col + right_col
@@ -41,7 +41,7 @@ seats = generate_manifest(rows, left_col, right_col)
 
 
 
-methods_list = [btf_method, vilgot_method, random_order_method, wilma_method, btf_method, steffen_method]
+methods_list = [Random_order_method, Wilma_method, Btf_method,Modified_block_method,Steffen_method,Reversed_pyramid_method]
 
 methods_steps = []
 
@@ -51,9 +51,9 @@ for f in methods_list:
     print(str(f.__name__))
     for i in range(0,20):
         agents = f(seats,spawn_loc)
-        visual_system = Visuals(rows, column, amount_of_ailes=1, method_name = f.__name__, corridor_row=1)
-        visual_system.update_passengers(passenger_list = agents)
-        visual_system.draw_grid()
+        # visual_system = Visuals(rows, column, amount_of_ailes=1, method_name = f.__name__, corridor_row=1)
+        # visual_system.update_passengers(passenger_list = agents)
+        # visual_system.draw_grid()
         steps = 0
             
         while not all(a.seated for a in agents):
@@ -63,39 +63,44 @@ for f in methods_list:
             agents.sort(key=lambda p: p.x)
 
             for i, a in enumerate(agents):
-                visual_system.canvas.delete(a.tinkerobject, a.tinkertext)
+                # visual_system.canvas.delete(a.tinkerobject, a.tinkertext)
                 others = agents[:i] + agents[i+1:]
                 a.move(other_agents = others)
 
-            time.sleep(0.04)
-            visual_system.update_passengers(passenger_list = agents)
-            visual_system.root.update_idletasks()
-            visual_system.root.update()
+            # time.sleep(0.0001)
+            # visual_system.update_passengers(passenger_list = agents)
+            # visual_system.root.update_idletasks()
+            # visual_system.root.update()
             steps += 1
-        visual_system.root.destroy()
+        #visual_system.root.destroy()
         steps_list.append(steps)
     methods_steps.append(steps_list)
 
-means = []
-errors = []
+
+
+method_names = [m.__name__.replace("_", " ").replace("method","") for m in methods_list]
+
 
 for i, f in enumerate(methods_list):
-    # data = methods_steps[i]
-    # means.append(np.mean(data))
-    # errors.append(np.std(data))   # or std/np.sqrt(n) for SEM
     data = methods_steps[i]
     mean = np.mean(data)
     err = np.std(data)
 
     plt.errorbar(
-        i, [mean], yerr=[err],
-        fmt='o', capsize=5, label=f.__name__
+        i, mean, yerr=err,
+        fmt='o', capsize=5, label=method_names
     )
-    
 
+# Korrekt sätt att sätta etiketterna
+plt.xticks(
+    ticks=range(len(methods_list)),
+    labels=method_names,
+    rotation=-30,fontsize = 10
+)
 
-plt.xticks([])  # no x-axis labels
 plt.ylabel("Timesteps")
+plt.xlabel("Boarding methods")
 plt.title("Boarding Time Comparison")
-plt.legend(loc="best")
+plt.tight_layout()
+plt.grid()
 plt.show()

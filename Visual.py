@@ -182,6 +182,7 @@ class Visuals:
                 col = "#008000"   # mörkgrön
             elif passenger.boarding_group == 5:
                 col = "#004D00"   # mycket mörkgrön
+                
             else:
                 col = "green"
 

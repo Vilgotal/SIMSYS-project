@@ -4,7 +4,7 @@ import random
 # Could implement a probability creating outliers for the boarding methods. like if probability < certain noise,
 
 
-def wilma_method(seats,spawn_loc):
+def Wilma_method(seats,spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     priority = {
         0: 0, 6: 0,
@@ -18,7 +18,7 @@ def wilma_method(seats,spawn_loc):
 def get_priority(num):
     return (num - 1) // 5
 
-def btf_method(seats,spawn_loc):
+def Btf_method(seats,spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     max_seat = agents[-1].row #33
     priority = {
@@ -30,12 +30,12 @@ def btf_method(seats,spawn_loc):
     agents.sort(key=lambda p: (p.boarding_group, random.random()))
     return agents
 
-def random_order_method(seats, spawn_loc):
+def Random_order_method(seats, spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     agents.sort(key=lambda _: random.random())
     return agents
 
-def hugo_method(seats, spawn_loc):
+def Reversed_pyramid_method(seats, spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     max_seat = agents[-1].row
     priority_col = {
@@ -56,7 +56,7 @@ def hugo_method(seats, spawn_loc):
     agents.sort(key=lambda p: (p.boarding_group, random.random()))
     return agents
 
-def vilgot_method(seats,spawn_loc):
+def Modified_block_method(seats,spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
 
 
@@ -122,7 +122,7 @@ def vilgot_method(seats,spawn_loc):
 #     return agents
 
 
-def steffen_method(seats,spawn_loc):
+def Steffen_method(seats,spawn_loc):
     left_window_odd_seats = []
     left_window_even_seats = []
 
