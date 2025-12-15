@@ -16,7 +16,7 @@ def Wilma_method(seats,spawn_loc):
     return agents
 
 def get_priority(num):
-    return (num - 1) // 5
+    return (num - 1) // 6
 
 def Btf_method(seats,spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
@@ -40,21 +40,31 @@ def Random_order_method(seats, spawn_loc):
 def Reversed_pyramid_method(seats, spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     max_seat = agents[-1].row
+    num_blocks = 5
+    rows_per_block = max_seat / num_blocks
     priority_col = {
         0: 0, 6: 0,
         1: 1, 5: 1,
-        2: 2, 4: 2}
+        2: 2, 4: 2
+    }
+
     priority = {
-        (0,0): 1, (1,0): 2, (2,0): 3,
-        (0,1): 1, (1,1): 2, (2,1): 3,
-        (0,2): 0, (1,2): 2, (2,2): 3,
-        (0,3): 0, (1,3): 2, (2,3): 3,
-        (0,4): 0, (1,4): 1, (2,4): 2,
-        (0,5): 0, (1,5): 0, (2,5): 1,
-        (0,6): 0, (1,6): 0, (2,6): 0,
-        }
-    for a in agents: 
-        a.boarding_group = priority.get((priority_col.get(a.column_index), (a.row - 1) // 6), 4)
+        (0,0): 0, (1,0): 0, (2,0): 1,
+        (0,1): 0, (1,1): 1, (2,1): 2,
+        (0,2): 0, (1,2): 1, (2,2): 2,
+        (0,3): 1, (1,3): 2, (2,3): 3,
+        (0,4): 1, (1,4): 2, (2,4): 3,
+    }
+
+    for a in agents:
+        col_group = priority_col[a.column_index]
+
+        # Dynamic row block (back to front)
+        row_block = int((max_seat - a.row) // rows_per_block)
+        row_block = min(row_block, num_blocks - 1)
+
+        a.boarding_group = priority.get((col_group, row_block), 4)
+
     agents.sort(key=lambda p: (p.boarding_group, random.random()))
     return agents
 
