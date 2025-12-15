@@ -33,6 +33,8 @@ def Btf_method(seats,spawn_loc):
 def Random_order_method(seats, spawn_loc):
     agents = [Agent(seat, spawn_loc) for seat in seats]
     agents.sort(key=lambda _: random.random())
+    for i, a in enumerate(agents):
+        a.boarding_group = i
     return agents
 
 def Reversed_pyramid_method(seats, spawn_loc):

@@ -1,5 +1,5 @@
 import tkinter as tk
-#import numpy as np
+import numpy as np
 from agent import *
 import time
 
@@ -170,23 +170,22 @@ class Visuals:
 
         if passenger.seated:
             #col = "green"
-            if passenger.boarding_group == 0:
+            if passenger.boarding_group%6 == 0:
                 col = "#E6F9E6"   # mycket ljusgrön
-            elif passenger.boarding_group == 1:
+            elif passenger.boarding_group%6 == 1:
                 col = "#B3F2B3"   # ljusgrön
-            elif passenger.boarding_group == 2:
+            elif passenger.boarding_group%6 == 2:
                 col = "#66E066"   # klar grön
-            elif passenger.boarding_group == 3:
+            elif passenger.boarding_group%6 == 3:
                 col = "#33B533"   # mellanmörk grön
-            elif passenger.boarding_group == 4:
+            elif passenger.boarding_group%6 == 4:
                 col = "#008000"   # mörkgrön
-            elif passenger.boarding_group == 5:
+            elif passenger.boarding_group%6 == 5:
                 col = "#004D00"   # mycket mörkgrön
-                
             else:
                 col = "green"
 
-        elif passenger.luggage_pause > 0 and passenger.luggage_pause < 3:
+        elif passenger.luggage_pause > 0 and passenger.luggage_pause < passenger.luggage_pause_parameter:
             col = "red"
         elif passenger.seat_pause > 0:
             col = "pink"
