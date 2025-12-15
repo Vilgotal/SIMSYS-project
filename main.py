@@ -41,7 +41,7 @@ seats = generate_manifest(rows, left_col, right_col)
 
 
 
-methods_list = [Modified_block_method, Wilma_method, Btf_method, Modified_block_method, Steffen_method, Reversed_pyramid_method]
+methods_list = [Reversed_pyramid_method, Wilma_method, Btf_method, Modified_block_method, Steffen_method, Reversed_pyramid_method]
 
 methods_steps = []
 

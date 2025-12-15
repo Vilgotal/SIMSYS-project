@@ -47,11 +47,11 @@ def Reversed_pyramid_method(seats, spawn_loc):
     priority = {
         (0,0): 1, (1,0): 2, (2,0): 3,
         (0,1): 1, (1,1): 2, (2,1): 3,
-        (0,2): 1, (1,2): 2, (2,2): 3,
+        (0,2): 0, (1,2): 2, (2,2): 3,
         (0,3): 0, (1,3): 2, (2,3): 3,
         (0,4): 0, (1,4): 1, (2,4): 2,
         (0,5): 0, (1,5): 0, (2,5): 1,
-        (0,6): 0, (1,6): 0, (2,6): 1,
+        (0,6): 0, (1,6): 0, (2,6): 0,
         }
     for a in agents: 
         a.boarding_group = priority.get((priority_col.get(a.column_index), (a.row - 1) // 6), 4)
@@ -200,4 +200,6 @@ def Steffen_method(seats,spawn_loc):
 
     merged_list = merged_list_window + merged_list_middle + merged_list_aisle
     agents = [Agent(seat, spawn_loc) for seat in merged_list]
+    for i,a in enumerate(agents):
+        a.boarding_group = i
     return agents
